@@ -1,0 +1,7 @@
+fr\ws\controller\HomeController.class
+fr\ws\bean\User.class
+fr\ws\App.class
+fr\ws\config\JtwigConfig.class
+fr\ws\controller\UserController.class
+fr\ws\service\UserService.class
+fr\ws\config\WebMvcConfig.class

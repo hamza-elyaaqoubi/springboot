@@ -1,0 +1,18 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="home.css">
+</head>
+<body>
+    Hello {{ name }}!
+    <br/>
+
+    Users length : {{length(users)}}
+    <br/>
+
+    {% for user in users %}
+        {{user.id}} -- {{user.name}} -- {{user.age}}<br/>
+    {% endfor %}
+</body>
+
+</html>
