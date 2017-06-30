@@ -1,36 +1,29 @@
 package fr.ws.bean;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class User {
 
-    private int id;
+    private String id;
     private String name;
     private int age;
-    private String vsaCountry;
-    private Set<String> cancelCountries = new HashSet<String>();
 
     public User() {
     }
 
-    public User(int id) {
+    public User(String id) {
         this.id = id;
     }
 
-    public User(int id, String name, int age, String vsaCountry, Set<String> cancelCountries) {
+    public User(String id, String name, int age) {
         this(id);
         this.name = name;
-        this.age = age;
-        this.vsaCountry = vsaCountry;
-        this.cancelCountries.addAll(cancelCountries);
+        this.age = age;;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,21 +41,5 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public String getVsaCountry() {
-        return vsaCountry;
-    }
-
-    public void setVsaCountry(String vsaCountry) {
-        this.vsaCountry = vsaCountry;
-    }
-
-    public Set<String> getCancelCountries() {
-        return cancelCountries;
-    }
-
-    public void setCancelCountries(Set<String> cancelCountries) {
-        this.cancelCountries = cancelCountries;
     }
 }

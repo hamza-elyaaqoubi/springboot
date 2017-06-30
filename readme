@@ -1,0 +1,31 @@
+### Méthode 1
+#### Démarage du Mongodb directement depuis le répertoire d'installation
+Etape 1 : démarage du service mongodb => start mongodb server
+Etape 2 : 
+cd C:/Program Files/MongoDB/Server/3.2.13/bin
+lancer mongo shell => start mongo shell
+
+#### Installer mongodd as service
+sc.exe create MongoDB binPath= "\"C:\Program Files\MongoDB\Server\3.2.13\bin\mongod.exe\" --service --config=\"C:\Program Files\MongoDB\Server\3.2.13\mongod.cfg\"" DisplayName= "MongoDB" start= "auto"
+
+### Méthode 2 (Recommended)
+
+Etape 1 : Démarage du service => net start mongodb
+Etape 2 : 
+cd C:/Program Files/MongoDB/Server/3.2.13/bin
+lancer mongo shell => start mongo shell
+
+##### Arrêt du service
+net stop mongodb
+
+##### Supprimer MongoDB service 
+sc.exe delete MongoDB
+
+### Create collection
+db.createCollection("users", {autoIndexId : true, size : 6142800, max : 10000 } )
+
+### Insert in collection
+db.users.insert( { "name": "mimi", "age": NumberInt(10)} )
+
+### Clear collection
+db.users.drop()

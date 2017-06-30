@@ -1,8 +1,14 @@
 package fr.ws.service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import fr.ws.ConnectDb;
 import fr.ws.bean.User;
-import fr.ws.config.AfterSaleProperties;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,29 +18,53 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private AfterSaleProperties afterSaleProperties;
+    private MongoTemplate mongoTemplate;
 
     public List<User> getUsers() {
-        User user1 = new User(1, "Hamza", 20, afterSaleProperties.getVsa().getAuthorisedCountries(), afterSaleProperties.getCancel().getAuthorisedCountries());
-        User user2 = new User(2, "Mimi", 30, afterSaleProperties.getVsa().getAuthorisedCountries(), afterSaleProperties.getCancel().getAuthorisedCountries());
-
         List<User> users = new ArrayList<User>();
-        users.add(user1);
-        users.add(user2);
+        DBCollection table = ConnectDb.getInstance().getCollection("users");
 
-        return users;
+        return buildUsersFromDB(table.find());
     }
 
-    public List<User> addUser(String id, String name, String age) {
-        List<User> users = getUsers();
-        users.add(new User(Integer.valueOf(id), name, Integer.valueOf(age), afterSaleProperties.getVsa().getAuthorisedCountries(), afterSaleProperties.getCancel().getAuthorisedCountries()));
-        return users;
+    public List<User> addUser(String name, String age) {
+        List<User> users = new ArrayList<User>();
+        DBCollection table = ConnectDb.getInstance().getCollection("users");
+        BasicDBObject document = new BasicDBObject();
+        document.put("name", name);
+        document.put("age", age);
+        table.insert(document);
+
+        return buildUsersFromDB(table.find());
     }
 
-    public List<User> addUser(User user) {
-        List<User> users = getUsers();
-        users.add(user);
-        return users;
+    public List<User> removeUser(String id) {
+        List<User> users = new ArrayList<User>();
+        DBCollection table = ConnectDb.getInstance().getCollection("users");
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("_id", new ObjectId(id));
+        table.remove(searchQuery);
+
+        return buildUsersFromDB(table.find());
     }
 
+    public boolean removeAll() {
+        try {
+            DBCollection table = ConnectDb.getInstance().getCollection("users");
+            table.drop();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private List<User> buildUsersFromDB(DBCursor dbCursor) {
+        List<User> users = new ArrayList<User>();
+        List<DBObject> dbObjects = dbCursor.toArray();
+        for (DBObject dbo : dbObjects) {
+            users.add(mongoTemplate.getConverter().read(User.class, dbo));
+        }
+        return users;
+    }
 }
